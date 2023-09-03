@@ -16,17 +16,23 @@ const Feedback = ({ setter, results }) => {
 const Statistics = ({ results }) => {
 	const totalVotes = results.good + results.neutral + results.bad;
 	const average = (results.good - results.bad) / totalVotes;
-  const positive = results.good / totalVotes * 100 
+	const positive = (results.good / totalVotes) * 100;
 
 	return (
 		<div>
 			<h2>Statistics</h2>
-			<p>Good: {results.good}</p>
-			<p>Neutral: {results.neutral}</p>
-			<p>Bad: {results.bad}</p>
-			<p>All: {totalVotes}</p>
-			<p>Average: {average ? average : ''}</p>
-      <p>Positive: {positive ? positive + ' %' : ''}</p>
+			{totalVotes > 0 ? (
+				<>
+					<p>Good: {results.good}</p>
+					<p>Neutral: {results.neutral}</p>
+					<p>Bad: {results.bad}</p>
+					<p>All: {totalVotes}</p>
+					<p>Average: {average ? average : ''}</p>
+					<p>Positive: {positive ? positive + ' %' : ''}</p>
+				</>
+			) : (
+				<p>No feedback given</p>
+			)}
 		</div>
 	);
 };
