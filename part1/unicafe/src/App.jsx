@@ -1,14 +1,28 @@
 import { useState } from 'react';
 
+const Button = ({ setter, result, name }) => {
+	return <button onClick={() => setter(result + 1)}>{name}</button>;
+};
+
+const StatisticLine = ({ text, value }) => {
+	return (
+		<p>
+			{text}: {value}
+		</p>
+	);
+};
+
 const Feedback = ({ setter, results }) => {
 	return (
 		<div>
 			<h1>Give feedback</h1>
-			<button onClick={() => setter.setGood(results.good + 1)}>Good</button>
-			<button onClick={() => setter.setNeutral(results.neutral + 1)}>
-				Neutral
-			</button>
-			<button onClick={() => setter.setBad(results.bad + 1)}>Bad</button>
+			<Button setter={setter.setGood} result={results.good} name={'Good'} />
+			<Button
+				setter={setter.setNeutral}
+				result={results.neutral}
+				name={'Neutral'}
+			/>
+			<Button setter={setter.setBad} result={results.bad} name={'Bad'} />
 		</div>
 	);
 };
@@ -23,12 +37,14 @@ const Statistics = ({ results }) => {
 			<h2>Statistics</h2>
 			{totalVotes > 0 ? (
 				<>
-					<p>Good: {results.good}</p>
-					<p>Neutral: {results.neutral}</p>
-					<p>Bad: {results.bad}</p>
-					<p>All: {totalVotes}</p>
-					<p>Average: {average ? average : ''}</p>
-					<p>Positive: {positive ? positive + ' %' : ''}</p>
+					<StatisticLine text={'Good'} value={results.good} />
+					<StatisticLine text={'Neutral'} value={results.neutral} />
+					<StatisticLine text={'Bad'} value={results.bad} />
+					<StatisticLine text={'Average'} value={average ? average : ''} />
+					<StatisticLine
+						text={'Positive'}
+						value={positive ? positive + ' %' : ''}
+					/>
 				</>
 			) : (
 				<p>No feedback given</p>
