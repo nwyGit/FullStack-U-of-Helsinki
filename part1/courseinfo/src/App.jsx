@@ -4,22 +4,24 @@ const Header = ({ course }) => {
 
 const Content = ({ exercises }) => {
 	return (
-		<>
-			<p>
-				{exercises.part1} {exercises.exercises1}
-			</p>
-			<p>
-				{exercises.part2} {exercises.exercises2}
-			</p>
-			<p>
-				{exercises.part3} {exercises.exercises3}
-			</p>
-		</>
+		<div>
+			<Part part={exercises.part1} exercise={exercises.exercises1} />
+			<Part part={exercises.part2} exercise={exercises.exercises2} />
+			<Part part={exercises.part3} exercise={exercises.exercises3} />
+		</div>
 	);
 };
 
 const Total = ({ total }) => {
 	return <p>Number of exercises {total}</p>;
+};
+
+const Part = ({ part, exercise }) => {
+	return (
+		<p>
+			{part} {exercise}
+		</p>
+	);
 };
 
 const App = () => {
