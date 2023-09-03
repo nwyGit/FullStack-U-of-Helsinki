@@ -23,6 +23,7 @@ const App = () => {
 		6: 0,
 		7: 0,
 	});
+	const [mostVoted, setMostVoted] = useState(0);
 
 	function randomNumber(min, max) {
 		min = Math.ceil(min);
@@ -32,22 +33,40 @@ const App = () => {
 	}
 
 	function addVote(index) {
-		const copy = { ...points };
-		copy[index] += 1;
-		setPoints(copy);
+		points[index] += 1;
+		const updatedPoints = { ...points };
+		setPoints(updatedPoints);
+		checkMostVotes();
+	}
+
+	function checkMostVotes() {
+		let vote = 0;
+		let index = 0;
+		for (var i = 0; i < anecdotes.length; i++) {
+			if (points[i.toString()] > vote) {
+				vote = points[i];
+				index = i;
+			}
+		}
+		setMostVoted(index);
 	}
 
 	return (
 		<div>
-			<p>{anecdotes[selected]}</p>
-			<p>
-				has {points[selected]} vote{points[selected] > 1 ? 's' : ''}
-			</p>
 			<div>
+				<h1>Anecdote of the day</h1>
+				<p>{anecdotes[selected]}</p>
+				<p>
+					has {points[selected]} vote{points[selected] > 1 ? 's' : ''}
+				</p>
 				<button onClick={() => addVote(selected)}>vote</button>
 				<button onClick={() => randomNumber(0, anecdotes.length)}>
 					next anecdote
 				</button>
+			</div>
+			<div>
+				<h1>Anecdote with most votes</h1>
+				<p>{anecdotes[mostVoted]}</p>
 			</div>
 		</div>
 	);
