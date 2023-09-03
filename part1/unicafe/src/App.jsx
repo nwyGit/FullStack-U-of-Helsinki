@@ -6,9 +6,10 @@ const Button = ({ setter, result, name }) => {
 
 const StatisticLine = ({ text, value }) => {
 	return (
-		<p>
-			{text}: {value}
-		</p>
+		<tr>
+			<td>{text}:</td>
+			<td>{value}</td>
+		</tr>
 	);
 };
 
@@ -36,16 +37,21 @@ const Statistics = ({ results }) => {
 		<div>
 			<h2>Statistics</h2>
 			{totalVotes > 0 ? (
-				<>
-					<StatisticLine text={'Good'} value={results.good} />
-					<StatisticLine text={'Neutral'} value={results.neutral} />
-					<StatisticLine text={'Bad'} value={results.bad} />
-					<StatisticLine text={'Average'} value={average ? average : ''} />
-					<StatisticLine
-						text={'Positive'}
-						value={positive ? positive + ' %' : ''}
-					/>
-				</>
+				<table>
+					<tbody>
+						<StatisticLine text={'Good'} value={results.good} />
+						<StatisticLine text={'Neutral'} value={results.neutral} />
+						<StatisticLine text={'Bad'} value={results.bad} />
+						<StatisticLine
+							text={'Average'}
+							value={average ? Math.floor(average * 10) / 10 : ''}
+						/>
+						<StatisticLine
+							text={'Positive'}
+							value={positive ? Math.floor(positive * 10) / 10 + ' %' : ''}
+						/>
+					</tbody>
+				</table>
 			) : (
 				<p>No feedback given</p>
 			)}
