@@ -10,17 +10,20 @@ const PersonForm = ({ value, handler, setter }) => {
 	}
 
 	return (
-		<form onSubmit={handler}>
-			<div>
-				name: <input value={value.newName} onChange={handleNameChange} />
-			</div>
-			<div>
-				number: <input value={value.newNumber} onChange={handleNumberChange} />
-			</div>
-			<div>
-				<button type='submit'>add</button>
-			</div>
-		</form>
+		<>
+			<form onSubmit={handler}>
+				<div>
+					name: <input value={value.newName} onChange={handleNameChange} />
+				</div>
+				<div>
+					number:{' '}
+					<input value={value.newNumber} onChange={handleNumberChange} />
+				</div>
+				<div>
+					<button type='submit'>add</button>
+				</div>
+			</form>
+		</>
 	);
 };
 

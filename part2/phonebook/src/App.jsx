@@ -3,6 +3,7 @@ import services from './services/crud';
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
+import Notification from './components/Notification';
 
 const App = () => {
 	const [persons, setPersons] = useState([]);
@@ -10,12 +11,19 @@ const App = () => {
 	const [newNumber, setNewNumber] = useState('');
 	const [searchWord, setSearchWord] = useState('');
 	const [updateName, setUpdateName] = useState('');
+	const [notificationMsg, setNotificationMsg] = useState('');
 
 	useEffect(() => {
 		services
 			.getAll()
 			.then((data) => setPersons(data))
-			.catch((err) => console.log(err));
+			.catch((err) => {
+				console.log(err);
+				setNotificationMsg(`Error message: ${err}`);
+				setTimeout(() => {
+					setNotificationMsg('');
+				}, 5000);
+			});
 	}, []);
 
 	function handleSubmit(e) {
@@ -42,9 +50,21 @@ const App = () => {
 					.then(() =>
 						services.getAll().then((data) => {
 							setPersons(data);
+							setNotificationMsg(
+								`The number with name "${result_sameName.name}" is changed to "${newNumber}"`
+							);
+							setTimeout(() => {
+								setNotificationMsg('');
+							}, 5000);
 						})
 					)
-					.catch((err) => console.log(err));
+					.catch((err) => {
+						console.log(err);
+						setNotificationMsg(`Error message: ${err}`);
+						setTimeout(() => {
+							setNotificationMsg('');
+						}, 5000);
+					});
 			}
 		} else if (result_sameNumber) {
 			if (
@@ -57,12 +77,39 @@ const App = () => {
 					.then(() => {
 						services.getAll().then((data) => {
 							setPersons(data);
+							setNotificationMsg(
+								`The name with number "${result_sameNumber.number}" is changed to "${newName}"`
+							);
+							setTimeout(() => {
+								setNotificationMsg('');
+							}, 5000);
 						});
 					})
-					.catch((err) => console.log(err));
+					.catch((err) => {
+						console.log(err);
+						setNotificationMsg(`Error message: ${err}`);
+						setTimeout(() => {
+							setNotificationMsg('');
+						}, 5000);
+					});
 			}
 		} else {
-			services.create(newPerson).then((data) => setPersons([...persons, data]));
+			services
+				.create(newPerson)
+				.then((data) => {
+					setPersons([...persons, data]);
+					setNotificationMsg(`Added ${newName}`);
+					setTimeout(() => {
+						setNotificationMsg('');
+					}, 5000);
+				})
+				.catch((err) => {
+					console.log(err);
+					setNotificationMsg(`Error message: ${err}`);
+					setTimeout(() => {
+						setNotificationMsg('');
+					}, 5000);
+				});
 		}
 	}
 
@@ -71,14 +118,27 @@ const App = () => {
 			services.deletePerson(id);
 			services
 				.getAll()
-				.then((data) => setPersons(data))
-				.catch((err) => console.log(err));
+				.then((data) => {
+					setPersons(data);
+					setNotificationMsg(`Person deleted`);
+					setTimeout(() => {
+						setNotificationMsg('');
+					}, 5000);
+				})
+				.catch((err) => {
+					console.log(err);
+					setNotificationMsg(`Error message: ${err}`);
+					setTimeout(() => {
+						setNotificationMsg('');
+					}, 5000);
+				});
 		}
 	}
 
 	return (
 		<div>
 			<h2>Phonebook</h2>
+			<Notification message={notificationMsg} />
 			<Filter value={searchWord} setter={{ setSearchWord }} />
 			<h2>Add a new</h2>
 			<PersonForm

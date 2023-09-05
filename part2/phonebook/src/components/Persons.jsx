@@ -1,7 +1,6 @@
 import React from 'react';
 
 const Persons = ({ value, persons, handler }) => {
-	console.log(persons);
 	return (
 		<div>
 			{persons

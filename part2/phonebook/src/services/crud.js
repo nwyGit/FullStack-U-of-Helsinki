@@ -14,9 +14,7 @@ const update = (id, newObject) => {
 };
 
 const deletePerson = (id) => {
-	return axios
-		.delete(`${baseUrl}/${id}`)
-		.then(alert(`Person ID: ${id} is deleted.`));
+	return axios.delete(`${baseUrl}/${id}`);
 };
 
 export default {
