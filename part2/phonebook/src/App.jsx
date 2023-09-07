@@ -19,7 +19,7 @@ const App = () => {
 			.then((data) => setPersons(data))
 			.catch((err) => {
 				console.log(err);
-				setNotificationMsg(`Error message: ${err}`);
+				setNotificationMsg(`Error: ${err.response.data.error}`);
 				setTimeout(() => {
 					setNotificationMsg('');
 				}, 5000);
@@ -60,7 +60,7 @@ const App = () => {
 					)
 					.catch((err) => {
 						console.log(err);
-						setNotificationMsg(`Error message: ${err}`);
+						setNotificationMsg(`Error: ${err.response.data.error}`);
 						setTimeout(() => {
 							setNotificationMsg('');
 						}, 5000);
@@ -87,7 +87,7 @@ const App = () => {
 					})
 					.catch((err) => {
 						console.log(err);
-						setNotificationMsg(`Error message: ${err}`);
+						setNotificationMsg(`Error: ${err.response.data.error}`);
 						setTimeout(() => {
 							setNotificationMsg('');
 						}, 5000);
@@ -105,7 +105,7 @@ const App = () => {
 				})
 				.catch((err) => {
 					console.log(err);
-					setNotificationMsg(`Error message: ${err}`);
+					setNotificationMsg(`Error: ${err.response.data.error}`);
 					setTimeout(() => {
 						setNotificationMsg('');
 					}, 5000);
@@ -127,7 +127,7 @@ const App = () => {
 				})
 				.catch((err) => {
 					console.log(err);
-					setNotificationMsg(`Error message: ${err}`);
+					setNotificationMsg(`Error: ${err.response.data.error}`);
 					setTimeout(() => {
 						setNotificationMsg('');
 					}, 5000);
