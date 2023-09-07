@@ -1,5 +1,6 @@
 import express from 'express';
 import morgan from 'morgan';
+import cors from 'cors';
 import { data } from './data/index.js';
 
 const app = express();
@@ -12,6 +13,7 @@ const unknownEndpoint = (request, response) => {
 morgan.token('req-body', (req) => JSON.stringify(req.body));
 
 app.use(express.json());
+app.use(cors());
 app.use(
 	morgan(
 		':method :url :status :res[content-length] - :response-time ms :req-body'
