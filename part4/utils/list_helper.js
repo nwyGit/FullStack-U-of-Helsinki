@@ -102,7 +102,7 @@ const mostLikes = (blogs) => {
 	return result;
 };
 
-module.exports = {
+export default {
 	dummy,
 	totalLikes,
 	favoriteBlog,
