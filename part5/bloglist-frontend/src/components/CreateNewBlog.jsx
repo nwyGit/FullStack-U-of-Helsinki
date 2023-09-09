@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import blogs from '../services/blogs';
+
+CreateNewBlog.propTypes = {
+	value: PropTypes.array.isRequired,
+	setter: {
+		setBlogs: PropTypes.func.isRequired,
+		setMessage: PropTypes.func.isRequired,
+	},
+};
 
 const CreateNewBlog = ({ value, setter }) => {
 	const [title, setTitle] = useState('');
