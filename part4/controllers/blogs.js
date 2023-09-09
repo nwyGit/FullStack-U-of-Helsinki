@@ -1,10 +1,11 @@
 import express from 'express';
 import { Blog } from '../models/Blog.js';
+import { User } from '../models/User.js';
 
-const router = express.Router();
+const blogsRouter = express.Router();
 
-// Get all
-router.get('/', async (req, res, next) => {
+// Get all blogs
+blogsRouter.get('/', async (req, res, next) => {
 	try {
 		const blogs = await Blog.find({});
 		res.json(blogs);
@@ -14,7 +15,7 @@ router.get('/', async (req, res, next) => {
 });
 
 // Get one blog
-router.get('/:id', async (req, res, next) => {
+blogsRouter.get('/:id', async (req, res, next) => {
 	try {
 		const blog = Blog.findById(req.params.id);
 		if (blog) {
@@ -28,12 +29,25 @@ router.get('/:id', async (req, res, next) => {
 });
 
 // Create a blog
-router.post('/', async (req, res, next) => {
+blogsRouter.post('/', async (req, res, next) => {
 	const body = req.body;
-	const newBlog = new Blog({ ...body, likes: Number(body.likes) || 0 });
 
 	try {
+		const user = await User.findById(req.user);
+
+		const newBlog = new Blog({
+			title: body.title,
+			author: body.author,
+			url: body.url,
+			likes: Number(body.likes) || 0,
+			user: user.id,
+		});
+
 		const savedBlog = await newBlog.save();
+
+		user.blogs = user.blogs.concat(savedBlog._id);
+		await user.save();
+
 		res.status(201).json(savedBlog);
 	} catch (err) {
 		next(err);
@@ -41,7 +55,7 @@ router.post('/', async (req, res, next) => {
 });
 
 // Update a blog
-router.put('/:id', async (req, res, next) => {
+blogsRouter.put('/:id', async (req, res, next) => {
 	const body = req.body;
 
 	const newBlog = {
@@ -52,6 +66,12 @@ router.put('/:id', async (req, res, next) => {
 	};
 
 	try {
+		const { user } = await Blog.findById(req.params.id);
+
+		if (req.user != user.toString()) {
+			return res.status(401).json({ error: 'you are not the blog creator' });
+		}
+
 		const blog = await Blog.findByIdAndUpdate(req.params.id, newBlog, {
 			new: true,
 		});
@@ -62,8 +82,14 @@ router.put('/:id', async (req, res, next) => {
 });
 
 // Delete a blog
-router.delete('/:id', async (req, res, next) => {
+blogsRouter.delete('/:id', async (req, res, next) => {
 	try {
+		const { user } = await Blog.findById(req.params.id);
+
+		if (req.user != user.toString()) {
+			return res.status(401).json({ error: 'you are not the blog creator' });
+		}
+
 		await Blog.findByIdAndRemove(req.params.id);
 		res.status(204).end();
 	} catch (err) {
@@ -71,4 +97,4 @@ router.delete('/:id', async (req, res, next) => {
 	}
 });
 
-export default router;
+export default blogsRouter;
