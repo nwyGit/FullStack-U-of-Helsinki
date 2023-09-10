@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import blogService from '../services/blogs';
 
-const Blog = ({ blog, user }) => {
+const Blog = ({ blog, value, handleUpdate, deleteBlog }) => {
 	const blogStyle = {
 		paddingTop: 10,
 		paddingLeft: 2,
@@ -11,40 +10,35 @@ const Blog = ({ blog, user }) => {
 	};
 
 	const [showDetail, setShowDetail] = useState(false);
-	const [buttonContent, setButtonContent] = useState('hide');
+	const [buttonContent, setButtonContent] = useState('show');
 	const [likes, setLikes] = useState(blog.likes);
 
 	const toggleDetail = () => {
 		setShowDetail(!showDetail);
-		setButtonContent(showDetail ? 'hide' : 'show');
+		setButtonContent(showDetail ? 'show' : 'hide');
 	};
 
-	const updateLikes = () => {
-		blogService.update(blog.id, { ...blog, likes: blog.likes + 1 });
+	const updateLikes = (blog) => {
 		setLikes((prev) => prev + 1);
-	};
-
-	const deleteBlog = (id) => {
-		if (window.confirm(`Remove ${blog.title} ${blog.author}`)) {
-			blogService.deleteBlog(id);
-		}
+		const updatedBlog = { ...blog, likes: likes + 1 };
+		handleUpdate(updatedBlog);
 	};
 
 	return (
-		<div style={blogStyle}>
+		<li style={blogStyle} className='blog'>
 			{blog.title} {blog.author}{' '}
 			<button onClick={() => toggleDetail()}>{buttonContent}</button>
 			{showDetail && (
-				<>
+				<div className='togglableContent'>
 					<p>{blog.url}</p>
 					<p>
-						{likes} <button onClick={() => updateLikes()}>like</button>
+						{likes} <button onClick={() => updateLikes(blog)}>like</button>
 					</p>
-					<p>{user.name}</p>
-					<button onClick={() => deleteBlog(blog.id)}>remove</button>
-				</>
+					<p>{value.user.name}</p>
+					<button onClick={() => deleteBlog(blog)}>remove</button>
+				</div>
 			)}
-		</div>
+		</li>
 	);
 };
 
