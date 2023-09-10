@@ -21,8 +21,10 @@ const App = () => {
 	}, []);
 
 	useEffect(() => {
-		blogService.getAll().then((blogs) => setBlogs(blogs));
-	}, []);
+		if (user) {
+			blogService.getAll().then((blogs) => setBlogs(blogs));
+		}
+	}, [user]);
 
 	if (user === null) return <LoginForm setter={{ setUser }} />;
 
@@ -47,6 +49,14 @@ const App = () => {
 	const handleUpdate = async (blog) => {
 		try {
 			const newBlog = await blogService.update(blog.id, blog);
+			const newBlogs = blogs.map((b) => {
+				if (b.id === blog.id) {
+					return { ...b, likes: blog.likes };
+				}
+				return b;
+			});
+
+			setBlogs(newBlogs);
 
 			setMessage(`blog ${newBlog.title} by ${newBlog.author} updated`);
 			setTimeout(() => {

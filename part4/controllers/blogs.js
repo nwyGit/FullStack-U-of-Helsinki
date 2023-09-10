@@ -66,12 +66,6 @@ blogsRouter.put('/:id', async (req, res, next) => {
 	};
 
 	try {
-		const { user } = await Blog.findById(req.params.id);
-
-		if (req.user != user.toString()) {
-			return res.status(401).json({ error: 'you are not the blog creator' });
-		}
-
 		const blog = await Blog.findByIdAndUpdate(req.params.id, newBlog, {
 			new: true,
 		});

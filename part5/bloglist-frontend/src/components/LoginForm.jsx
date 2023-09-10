@@ -16,7 +16,7 @@ const LoginForm = ({ setter }) => {
 				username,
 				password,
 			});
-			
+
 			window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user));
 			blogService.setToken(user.token);
 			setter.setUser(user);
@@ -39,6 +39,7 @@ const LoginForm = ({ setter }) => {
 				<div>
 					username
 					<input
+						id='username'
 						type='text'
 						value={username}
 						name='Username'
@@ -48,13 +49,16 @@ const LoginForm = ({ setter }) => {
 				<div>
 					password
 					<input
+						id='password'
 						type='password'
 						value={password}
 						name='Password'
 						onChange={({ target }) => setPassword(target.value)}
 					/>
 				</div>
-				<button type='submit'>login</button>
+				<button id='login-button' type='submit'>
+					login
+				</button>
 			</form>
 		</div>
 	);

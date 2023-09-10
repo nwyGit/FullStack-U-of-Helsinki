@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import blogServices from '../services/blogs';
 
 const Blog = ({ blog, value, handleUpdate, deleteBlog }) => {
 	const blogStyle = {
@@ -12,6 +13,16 @@ const Blog = ({ blog, value, handleUpdate, deleteBlog }) => {
 	const [showDetail, setShowDetail] = useState(false);
 	const [buttonContent, setButtonContent] = useState('show');
 	const [likes, setLikes] = useState(blog.likes);
+	const [, setUsers] = useState([]);
+	const [blogCreator, setBlogCreator] = useState('');
+
+	useEffect(() => {
+		blogServices.findUser().then((users) => {
+			setUsers(users);
+			const creator = users.find((u) => u.id === blog.user).username;
+			setBlogCreator(creator);
+		});
+	}, []);
 
 	const toggleDetail = () => {
 		setShowDetail(!showDetail);
@@ -25,20 +36,25 @@ const Blog = ({ blog, value, handleUpdate, deleteBlog }) => {
 	};
 
 	return (
-		<li style={blogStyle} className='blog'>
+		<div style={blogStyle} className='blog'>
 			{blog.title} {blog.author}{' '}
-			<button onClick={() => toggleDetail()}>{buttonContent}</button>
+			<button id='#toggle-show-button' onClick={() => toggleDetail()}>
+				{buttonContent}
+			</button>
 			{showDetail && (
 				<div className='togglableContent'>
-					<p>{blog.url}</p>
+					<p>Url: {blog.url}</p>
 					<p>
-						{likes} <button onClick={() => updateLikes(blog)}>like</button>
+						Likes: {likes}{' '}
+						<button onClick={() => updateLikes(blog)}>like</button>
 					</p>
-					<p>{value.user.name}</p>
-					<button onClick={() => deleteBlog(blog)}>remove</button>
+					<p>{blogCreator}</p>
+					{blogCreator === value.user.username && (
+						<button onClick={() => deleteBlog(blog)}>remove</button>
+					)}
 				</div>
 			)}
-		</li>
+		</div>
 	);
 };
 

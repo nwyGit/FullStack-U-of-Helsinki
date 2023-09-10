@@ -1,5 +1,6 @@
 import axios from 'axios';
-const baseUrl = 'http://localhost:3003/api/blogs';
+const blogBaseUrl = 'http://localhost:3003/api/blogs';
+const userBaseUrl = 'http://localhost:3003/api/users';
 
 let token = null;
 
@@ -11,7 +12,7 @@ const getAll = async () => {
 	const config = {
 		headers: { Authorization: token },
 	};
-	const request = axios.get(baseUrl, config);
+	const request = axios.get(blogBaseUrl, config);
 	return request.then((response) => response.data);
 };
 
@@ -19,7 +20,7 @@ const create = async (newObject) => {
 	const config = {
 		headers: { Authorization: token },
 	};
-	const response = await axios.post(baseUrl, newObject, config);
+	const response = await axios.post(blogBaseUrl, newObject, config);
 	return response.data;
 };
 
@@ -27,7 +28,7 @@ const update = async (id, newObject) => {
 	const config = {
 		headers: { Authorization: token },
 	};
-	const request = axios.put(`${baseUrl}/${id}`, newObject, config);
+	const request = axios.put(`${blogBaseUrl}/${id}`, newObject, config);
 	return request.then((response) => response.data);
 };
 
@@ -35,7 +36,12 @@ const deleteBlog = async (id) => {
 	const config = {
 		headers: { Authorization: token },
 	};
-	return axios.delete(`${baseUrl}/${id}`, config);
+	return axios.delete(`${blogBaseUrl}/${id}`, config);
 };
 
-export default { getAll, create, update, deleteBlog, setToken };
+const findUser = async () => {
+	const request = axios.get(userBaseUrl);
+	return request.then((response) => response.data);
+};
+
+export default { getAll, create, update, deleteBlog, findUser, setToken };

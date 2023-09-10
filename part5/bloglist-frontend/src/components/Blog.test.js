@@ -15,8 +15,8 @@ test('renders content', () => {
 
 	const { container } = render(<Blog blog={blog} />);
 
-	const li = container.querySelector('.blog');
-	expect(li).toHaveTextContent('test me');
+	const div = container.querySelector('.blog');
+	expect(div).toHaveTextContent('test me');
 });
 
 test('clicking the button to show url and likes', async () => {
