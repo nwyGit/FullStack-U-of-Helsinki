@@ -1,13 +1,12 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { filterChange } from '../reducers/filterReducer';
 
 const Filter = () => {
 	const dispatch = useDispatch();
 
 	const handleChange = (e) => {
 		// input-field value is in variable event.target.value
-		dispatch(filterChange(e.target.value));
+		dispatch({ type: 'filter/filterChange', payload: e.target.value });
 	};
 
 	const style = {
