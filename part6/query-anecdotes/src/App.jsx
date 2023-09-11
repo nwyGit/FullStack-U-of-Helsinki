@@ -2,11 +2,13 @@ import AnecdoteForm from './components/AnecdoteForm';
 import Notification from './components/Notification';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getAnecdotes, updateAnecdote } from './requests';
+import { useNotificationDispatch } from './NotificationContext';
 
 const App = () => {
+	const dispatch = useNotificationDispatch();
 	const queryClient = useQueryClient();
 
-	// updating data
+	// updating data, has to be before fetching due to the hooks calling order
 	const updateAnecdoteMutation = useMutation(updateAnecdote, {
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['anecdotes'] });
@@ -16,6 +18,15 @@ const App = () => {
 	const handleVote = (anecdote) => {
 		console.log('vote');
 		updateAnecdoteMutation.mutate({ ...anecdote, votes: anecdote.votes + 1 });
+		dispatch({
+			type: 'NEW_NOTIFICATION',
+			payload: `anecdote '${anecdote.content}' voted`,
+		});
+		setTimeout(() => {
+			dispatch({
+				type: 'NO_NOTIFICATION',
+			});
+		}, 5000);
 	};
 
 	// fetching data

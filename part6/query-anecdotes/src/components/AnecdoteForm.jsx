@@ -1,7 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createAnecdote } from '../requests';
+import { useNotificationDispatch } from '../NotificationContext';
 
 const AnecdoteForm = () => {
+	const dispatch = useNotificationDispatch();
 	const queryClient = useQueryClient();
 
 	const newAnecdoteMutation = useMutation(createAnecdote, {
@@ -18,6 +20,25 @@ const AnecdoteForm = () => {
 		if (content.length >= 5) {
 			console.log('new anecdote');
 			newAnecdoteMutation.mutate({ content, votes: 0 });
+			dispatch({
+				type: 'NEW_NOTIFICATION',
+				payload: `Anecdote '${content}' successfully added`,
+			});
+			setTimeout(() => {
+				dispatch({
+					type: 'NO_NOTIFICATION',
+				});
+			}, 5000);
+		} else {
+			dispatch({
+				type: 'NEW_NOTIFICATION',
+				payload: 'too short anecdote, must have length 5 or more',
+			});
+			setTimeout(() => {
+				dispatch({
+					type: 'NO_NOTIFICATION',
+				});
+			}, 5000);
 		}
 	};
 
