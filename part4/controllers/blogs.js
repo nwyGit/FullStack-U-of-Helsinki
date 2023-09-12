@@ -54,19 +54,32 @@ blogsRouter.post('/', async (req, res, next) => {
 	}
 });
 
-// Update a blog
+// Like a blog
 blogsRouter.put('/:id', async (req, res, next) => {
 	const body = req.body;
 
 	const newBlog = {
-		title: body.title,
-		author: body.author,
-		url: body.url,
-		likes: Number(body.likes) || 0,
+		...body,
+		likes: Number(body.likes),
 	};
 
 	try {
 		const blog = await Blog.findByIdAndUpdate(req.params.id, newBlog, {
+			new: true,
+		});
+		res.json(blog);
+	} catch (err) {
+		next(err);
+	}
+});
+
+// Comment on a blog
+blogsRouter.put('/:id/comments', async (req, res, next) => {
+	const body = req.body;
+	console.log(req.params.id);
+
+	try {
+		const blog = await Blog.findByIdAndUpdate(req.params.id, body, {
 			new: true,
 		});
 		res.json(blog);
